@@ -13,7 +13,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Meu App 3'),
+        title: Text('Meu App 4'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
