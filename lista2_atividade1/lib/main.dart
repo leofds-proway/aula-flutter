@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(
           'Contador Pessoas',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontFamily: 'SuperDessert'),
         ),
         backgroundColor: Colors.amber,
       ),
