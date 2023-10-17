@@ -5,17 +5,17 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  bool sw = true;    
+  bool sw = true;
   bool cb = true;   // atributo
   List<String> _options = ['opção 1', 'opção 2'];
   double sliderValue = 0;
-    // atributo
+  // atributo
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,19 +25,19 @@ class _MyAppState extends State<MyApp> {
           title: Text('Buttons'),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center, 
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: (){},
-              child: Text('Click')
+                onPressed: (){},
+                child: Text('Click')
             ),
             TextButton(
-               onPressed: (){},
-               child: Text('Click')
+                onPressed: (){},
+                child: Text('Click')
             ),
             IconButton(
-              onPressed: (){},
-              icon: Icon(Icons.photo_camera)
+                onPressed: (){},
+                icon: Icon(Icons.photo_camera)
             ),
             Switch(
               value: sw,
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                 });
               },
             ),
-            
+
             Slider(
               value: sliderValue,        // Valor atual
               max: 100,         // Valor máximo
