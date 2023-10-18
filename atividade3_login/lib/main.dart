@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
         backgroundColor: Colors.green,
       ),
       body: Center(
@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       labelText: "E-mail",
                       hintText: "Informe seu e-mail",
                       errorText: _erroEmail),
@@ -124,7 +124,7 @@ class _HomeState extends State<Home> {
                 TextField(
                   controller: _senhaController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       labelText: "Senha",
                       hintText: "Informe sua senha",
                       errorText: _erroSenha),
@@ -137,9 +137,9 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: _click,
-                        child: Text('Login'),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green),
+                        child: const Text('Login'),
                       ),
                     ),
                   ],
