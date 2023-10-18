@@ -29,11 +29,12 @@ class Home extends StatelessWidget {
           children: [
             TextField(
               controller: _controller,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
+                  errorText: 'Campo obrigatório',
                 labelText: 'E-mail',
-                //hintText: 'senha',
+                hintText: 'senha',
                 border: OutlineInputBorder(), // InputBorder.none
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide()),
+                //enabledBorder: OutlineInputBorder(borderSide: BorderSide()),
                 prefixText: 'R\$ ',
                 suffixText: 'cm',
                 labelStyle: TextStyle(
@@ -46,12 +47,13 @@ class Home extends StatelessWidget {
                       width: 2
                   ),
                 ),
-
+                suffixIcon: Icon(Icons.beach_access)
               ),
               //obscureText: true,
               //obscuringCharacter: 's',
               keyboardType: TextInputType.number,
-              style: TextStyle(
+
+              style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: Colors.purple
@@ -59,9 +61,9 @@ class Home extends StatelessWidget {
               onSubmitted: (text){
                 _salvar();
               },
-              // onChanged: (text){
-              //   print(text);
-              // },
+              onChanged: (text){
+                print(text);
+              },
             ),
             SizedBox(height: 20,),
             ElevatedButton(onPressed: _salvar, child: Text('Salvar'))
