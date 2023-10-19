@@ -13,6 +13,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  final _alturaController = TextEditingController();
+  final _pesoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +44,13 @@ class _HomeState extends State<Home> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: TextField()),
+                    Expanded(child: TextField(
+                      controller: _alturaController,
+                    )),
                     const SizedBox(width: 20,),
-                    Expanded(child: TextField()),
+                    Expanded(child: TextField(
+                      controller: _pesoController,
+                    )),
                   ],
                 ),
                 const SizedBox(height: 10,),
