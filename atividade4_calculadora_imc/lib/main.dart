@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(50.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -39,6 +39,7 @@ class _HomeState extends State<Home> {
                   'assets/boy.png',
                   height: 200,
                 ),
+                const SizedBox(height: 20),
                 Text(
                   _mensagem,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
