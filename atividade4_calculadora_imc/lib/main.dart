@@ -22,26 +22,19 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calculadora IMC'),
+        backgroundColor: Colors.orange,
       ),
+      backgroundColor: Colors.amber[100],
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Informe')
-                  ],
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('IMC')
-                  ],
-                ),
+                Image.asset('assets/boy.png', height: 100,),
+                const Text('Informe'),
+                const Text('IMC'),
                 Row(
                   children: [
                     Expanded(child: TextField(
@@ -59,6 +52,9 @@ class _HomeState extends State<Home> {
                     Expanded(child: ElevatedButton(
                       onPressed: _clickCalcular,
                       child: const Text('Calcular'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                      ),
                     ))
                   ],
                 ),
