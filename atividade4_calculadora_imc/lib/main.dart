@@ -1,8 +1,9 @@
-
 import 'package:flutter/material.dart';
 
-void main(){
-  runApp(MaterialApp(home: Home(),));
+void main() {
+  runApp(MaterialApp(
+    home: Home(),
+  ));
 }
 
 class Home extends StatefulWidget {
@@ -13,9 +14,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   final _alturaController = TextEditingController();
   final _pesoController = TextEditingController();
+
+  String _mensagem = "Informe sua altura e peso";
+  String _imc = "";
 
   @override
   Widget build(BuildContext context) {
@@ -32,30 +35,71 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset('assets/boy.png', height: 100,),
-                const Text('Informe'),
-                const Text('IMC'),
+                Image.asset(
+                  'assets/boy.png',
+                  height: 200,
+                ),
+                Text(
+                  _mensagem,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(_imc),
+                const SizedBox(height: 15),
                 Row(
                   children: [
-                    Expanded(child: TextField(
-                      controller: _alturaController,
-                    )),
-                    const SizedBox(width: 20,),
-                    Expanded(child: TextField(
-                      controller: _pesoController,
-                    )),
+                    Expanded(
+                      child: TextField(
+                        controller: _alturaController,
+                        cursorColor: Colors.black54,
+                        decoration: InputDecoration(
+                            labelText: "Altura",
+                            suffixText: "m",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
+                            labelStyle: TextStyle(color: Colors.black54)),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: TextField(
+                        controller: _pesoController,
+                        cursorColor: Colors.black54,
+                        decoration: InputDecoration(
+                          labelText: "Peso",
+                          suffixText: "kg",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black54),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 15),
                 Row(
                   children: [
-                    Expanded(child: ElevatedButton(
-                      onPressed: _clickCalcular,
-                      child: const Text('Calcular'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _clickCalcular,
+                        child: const Text(
+                          'Calcular',
+                          style: TextStyle(fontSize: 25),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          fixedSize: Size(100, 50),
+                          shape: StadiumBorder(),
+                        ),
                       ),
-                    ))
+                    )
                   ],
                 ),
               ],
@@ -66,7 +110,5 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _clickCalcular(){
-
-  }
+  _clickCalcular() {}
 }
