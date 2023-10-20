@@ -52,6 +52,7 @@ class _HomeState extends State<Home> {
                       child: TextField(
                         controller: _alturaController,
                         cursorColor: Colors.black54,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             labelText: "Altura",
                             suffixText: "m",
@@ -69,6 +70,7 @@ class _HomeState extends State<Home> {
                       child: TextField(
                         controller: _pesoController,
                         cursorColor: Colors.black54,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: "Peso",
                           suffixText: "kg",
@@ -111,5 +113,33 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _clickCalcular() {}
+  _clickCalcular() {
+    String alturaTxt = _alturaController.text;
+    String pesoTxt = _pesoController.text;
+
+    alturaTxt = alturaTxt.replaceAll(',', '.').replaceAll(' ', '');
+    pesoTxt = pesoTxt.replaceAll(',', '.').replaceAll(' ', '');
+
+    double? altura = double.tryParse(alturaTxt);
+    double? peso = double.tryParse(pesoTxt);
+
+    if(altura != null && peso != null){
+      double imc = peso / (altura * altura);
+      _imc = 'IMC: ${imc.toStringAsFixed(1)}';
+
+      if(imc < 18.5){
+        _mensagem = "Abaixo do peso";
+      } else if(imc < 25) {
+        _mensagem = "Normal";
+      } else if(imc < 30) {
+        _mensagem = "Sobrepeso";
+      } else if(imc < 40) {
+        _mensagem = "Obesidade";
+      } else {
+        _mensagem = "Obesidade grave";
+      }
+    }
+    setState(() {
+    });
+  }
 }
