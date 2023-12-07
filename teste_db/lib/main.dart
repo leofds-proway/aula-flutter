@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -14,12 +16,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  late Future<Database> _database;
+  late Database _db;
 
   iniciarBanco() async {
     WidgetsFlutterBinding.ensureInitialized();
-    print(join(await getDatabasesPath(), 'teste.db'));
-    _database = openDatabase(
+    _db = await openDatabase(
       join(await getDatabasesPath(), 'teste.db'),
       onCreate: (db, version) {
         return db.execute(
@@ -30,12 +31,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  insert() async {
-    final db = await _database;
-
+  inserir() async {
     Pessoa pessoa = Pessoa(id: null, nome: 'Leonardo');
 
-    await db.insert(
+    await _db.insert(
       'pessoas',
       pessoa.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -43,16 +42,14 @@ class _HomeState extends State<Home> {
   }
 
   mostrar() async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> maps = await db.query('pessoas');
+    final List<Map<String, dynamic>> maps = await _db.query('pessoas');
     print(maps);
   }
 
   @override
   void initState() {
     iniciarBanco().then((_){
-      insert();
+      inserir();
       mostrar();
     });
   }
