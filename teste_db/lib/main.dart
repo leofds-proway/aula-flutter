@@ -1,11 +1,14 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:teste_db/pessoa.dart';
 
-void main() => runApp(MaterialApp(home: Home()));
+void main() => runApp(MaterialApp(
+      home: Home(),
+      theme: ThemeData(
+        useMaterial3: false,
+      ),
+    ));
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,7 +18,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   late Database _db;
 
   iniciarBanco() async {
@@ -48,10 +50,17 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    iniciarBanco().then((_){
-      inserir();
+    iniciarBanco().then((_) {
       mostrar();
     });
+  }
+
+  _clickAdd(){
+
+  }
+
+  _clickExibir(){
+    mostrar();
   }
 
   @override
@@ -59,9 +68,61 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Teste DB'),
-        backgroundColor: Colors.blue,
       ),
-      body: Container(),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Expanded(
+                  child: TextField(
+                    style: TextStyle(color: Colors.purple),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Nome',
+                      border: OutlineInputBorder(), // InputBorder.none
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: _clickAdd,
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(60, 55),
+                  ),
+                  child: const Icon(Icons.add),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _clickExibir,
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(0, 55),
+                    ),
+                    child: const Text(
+                      'Exibir',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
