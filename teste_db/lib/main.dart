@@ -18,7 +18,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Database _db;
+
+  late Database? _db;
+  final _controller = TextEditingController();
+  List<Pessoa> _pessoas = [];
 
   iniciarBanco() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -33,34 +36,37 @@ class _HomeState extends State<Home> {
     );
   }
 
-  inserir() async {
-    Pessoa pessoa = Pessoa(id: null, nome: 'Leonardo');
-
-    await _db.insert(
-      'pessoas',
-      pessoa.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  mostrar() async {
-    final List<Map<String, dynamic>> maps = await _db.query('pessoas');
-    print(maps);
-  }
-
   @override
   void initState() {
     iniciarBanco().then((_) {
-      mostrar();
     });
   }
 
-  _clickAdd(){
-
+  _buscaTodos() async {
+    if(_db != null){
+      final List<Map<String, dynamic>> result = await _db!.query('pessoas');
+      _pessoas = result.map((element) => Pessoa.fromMap(element)).toList();
+      setState(() {
+      });
+    }
   }
 
-  _clickExibir(){
-    mostrar();
+  _clickAdd() async{
+    if(_controller.text.isNotEmpty){
+      Pessoa pessoa = Pessoa(id: null, nome: _controller.text);
+      await _db?.insert('pessoas', pessoa.toMap());
+      //await _db.execute("insert into pessoas (nome) values(?)", [pessoa.nome]);
+
+      _buscaTodos();
+      setState(() {
+        _controller.text = '';
+      });
+      FocusScope.of(this.context).requestFocus(FocusNode());
+    }
+  }
+
+  _clickExibir() async {
+    _buscaTodos();
   }
 
   @override
@@ -69,57 +75,71 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text('Teste DB'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: Center(
         child: Column(
           children: [
-            Row(
-              children: [
-                const Expanded(
-                  child: TextField(
-                    style: TextStyle(color: Colors.purple),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'Nome',
-                      border: OutlineInputBorder(), // InputBorder.none
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      style: const TextStyle(color: Colors.purple),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Nome',
+                        border: OutlineInputBorder(), // InputBorder.none
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                  onPressed: _clickAdd,
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(60, 55),
+                  const SizedBox(
+                    width: 10,
                   ),
-                  child: const Icon(Icons.add),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _clickExibir,
+                  ElevatedButton(
+                    onPressed: _clickAdd,
                     style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(0, 55),
+                      fixedSize: const Size(60, 55),
                     ),
-                    child: const Text(
-                      'Exibir',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                )
-              ],
+                    child: const Icon(Icons.add),
+                  )
+                ],
+              ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _clickExibir,
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(0, 55),
+                      ),
+                      child: const Text(
+                        'Exibir',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                children: [
+                  for(final item in _pessoas)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(item.nome, style: TextStyle(fontSize: 30),),
+                    )
+                ],
+              ),
+            )
           ],
         ),
       ),
