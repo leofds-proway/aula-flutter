@@ -12,7 +12,14 @@ class Page2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return
+      // PopScope(
+      //   canPop: false,
+      //   onPopInvoked: (pop){
+      //     Navigator.of(context).pop();
+      //     //_clickVoltar(context);
+      //   },
+      WillPopScope(
       onWillPop: () async {
         _clickVoltar(context);
         return false;
