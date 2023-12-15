@@ -1,3 +1,4 @@
+import 'package:cad_pessoas/model/pessoa.dart';
 import 'package:cad_pessoas/widgets/custom_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,51 +16,93 @@ class _NovoState extends State<Novo> {
   final _telefoneController = TextEditingController();
   final _emailController = TextEditingController();
   final _esdatoCivilController = CustomSwitchController();
+  final _formKey = GlobalKey<FormState>();
 
-  _getTextFieldRow(
+  _getTextField(
       {required String label,
       required String hint,
       required final controller,
-      List<TextInputFormatter>? textInputFormatterList}) {
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: controller,
-              inputFormatters: textInputFormatterList,
-              decoration: InputDecoration(
-                  labelText: label,
-                  hintText: hint,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20))),
-            ),
-          ),
+      List<TextInputFormatter>? textInputFormatterList,
+      String? Function(String? value)? validator}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        controller: controller,
+        inputFormatters: textInputFormatterList,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hint,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         ),
-      ],
+        validator: validator,
+      ),
     );
   }
 
-  _esconderTeclado(){
+  String? _validaNome(String? value) {
+    if (value != null && value.isEmpty) {
+      return 'Campo inválido';
+    }
+  }
+
+  _esconderTeclado() {
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  _clickSalvar() {
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Salvar?'),
+                content: Text('Tem certeza que deseja salvar?'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancelar')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _salvar();
+                      },
+                      child: Text('Salvar')),
+                ],
+              ));
+    }
+  }
+
+  _salvar() {
+    String campoNome = _nomeController.text;
+    String campoTelefone = _telefoneController.text;
+    String campoEmail = _emailController.text;
+    bool chaveEstadoCivil = _esdatoCivilController.selected;
+
+    Pessoa pessoa = Pessoa(
+      nome: campoNome,
+      telefone: campoTelefone,
+      email: campoEmail,
+      estadoCivil: chaveEstadoCivil,
+    );
+
+    Navigator.pop(context, pessoa);
   }
 
   var maskFormatter = MaskTextInputFormatter(
       mask: '(##) #####-####',
-      filter: { "#": RegExp(r'[0-9]') },
-      type: MaskAutoCompletionType.lazy
-  );
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Novo'),
+        title: const Text('Novo'),
       ),
       backgroundColor: Colors.grey[200],
       body: GestureDetector(
-        onTap: (){
+        onTap: () {
           _esconderTeclado();
         },
         child: SingleChildScrollView(
@@ -74,54 +117,59 @@ class _NovoState extends State<Novo> {
                       child: Card(
                         elevation: 5.0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0), //<-- SEE HERE
+                          borderRadius:
+                              BorderRadius.circular(20.0), //<-- SEE HERE
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              _getTextFieldRow(
-                                label: 'Nome',
-                                hint: 'Informe seu nome',
-                                controller: _nomeController,
-                              ),
-                              _getTextFieldRow(
-                                label: 'Telefone',
-                                hint: 'Informe seu telefone',
-                                controller: _telefoneController,
-                                textInputFormatterList: [maskFormatter]
-                              ),
-                              _getTextFieldRow(
-                                label: 'E-mail',
-                                hint: 'Informe seu e-mail',
-                                controller: _emailController,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Text('Casado?'),
-                                    CustomSwitch(controller: _esdatoCivilController, onChanged: (){
-                                      _esconderTeclado();
-                                    },)
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () {
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                _getTextField(
+                                    label: 'Nome',
+                                    hint: 'Informe seu nome',
+                                    controller: _nomeController,
+                                    validator: _validaNome),
+                                _getTextField(
+                                    label: 'Telefone',
+                                    hint: 'Informe seu telefone',
+                                    controller: _telefoneController,
+                                    textInputFormatterList: [maskFormatter]),
+                                _getTextField(
+                                    label: 'E-mail',
+                                    hint: 'Informe seu e-mail',
+                                    controller: _emailController),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Text('Casado?'),
+                                      CustomSwitch(
+                                        controller: _esdatoCivilController,
+                                        onChanged: () {
+                                          _esconderTeclado();
                                         },
-                                        child: Text('Salvar'),
-                                      ),
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0, bottom: 8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: _clickSalvar,
+                                          child: Text('Salvar'),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
