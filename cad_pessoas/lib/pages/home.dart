@@ -14,12 +14,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late List<Pessoa> _listaPessoas;
+  List<Pessoa> _listaPessoas = [];
   late PessoaDao _pessoaDao;
 
   @override
-  initState(){
+  initState() {
     _pessoaDao = PessoaDaoDb();
+    _iniciarRepositorio();
+  }
+
+  _iniciarRepositorio() async {
+    await _pessoaDao.iniciar();
     _listaPessoas = _pessoaDao.listar();
   }
 

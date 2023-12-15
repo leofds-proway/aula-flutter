@@ -26,4 +26,7 @@ class PessoaDaoMemory implements PessoaDao {
     return pessoa;
   }
 
+  @override
+  iniciar() {
+  }
 }

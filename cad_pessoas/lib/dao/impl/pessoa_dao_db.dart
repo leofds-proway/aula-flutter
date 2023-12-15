@@ -1,8 +1,25 @@
 
 import 'package:cad_pessoas/dao/pessoa_dao.dart';
 import 'package:cad_pessoas/model/pessoa.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class PessoaDaoDb implements PessoaDao {
+
+  Database? _db;
+
+  @override
+  iniciar() async {
+    _db = await openDatabase(
+      join(await getDatabasesPath(), 'cad_pessoas.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE pessoas(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, estado_civil NUMERIC)',
+        );
+      },
+      version: 1,
+    );
+  }
 
   @override
   atualizar(Pessoa pessoa) {
@@ -18,8 +35,7 @@ class PessoaDaoDb implements PessoaDao {
 
   @override
   List<Pessoa> listar() {
-    // TODO: implement listar
-    throw UnimplementedError();
+    return [];
   }
 
   @override
@@ -27,5 +43,9 @@ class PessoaDaoDb implements PessoaDao {
     // TODO: implement salvar
     throw UnimplementedError();
   }
+
+
+
+
 
 }
