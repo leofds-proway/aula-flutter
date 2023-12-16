@@ -20,22 +20,23 @@ class _HomeState extends State<Home> {
   @override
   initState() {
     _pessoaDao = PessoaDaoDb();
-    _iniciarRepositorio();
-  }
-
-  _iniciarRepositorio() async {
-    await _pessoaDao.iniciar();
-    _listaPessoas = _pessoaDao.listar();
+    _pessoaDao.iniciar().then((_) async {
+      _listaPessoas = await _pessoaDao.listar();
+      setState(() {});
+    });
   }
 
   _clickAdd() {
     Navigator.push<Pessoa?>(
       context,
-      MaterialPageRoute(builder: (context) => Novo()),
+      MaterialPageRoute(
+        builder: (context) => Novo(),
+      ),
     ).then((Pessoa? pessoa) {
-      if(pessoa != null){
-        _listaPessoas.add( _pessoaDao.salvar(pessoa) );
-        setState(() {
+      if (pessoa != null) {
+        _pessoaDao.salvar(pessoa).then((pessoaSalva) {
+          _listaPessoas.add(pessoaSalva);
+          setState(() {});
         });
       }
     });

@@ -7,26 +7,27 @@ class PessoaDaoMemory implements PessoaDao {
   List<Pessoa> _listaPessoas = [];
 
   @override
-  atualizar(Pessoa pessoa) {
+  Future atualizar(Pessoa pessoa) async {
   }
 
   @override
-  excluir(Pessoa pessoa) {
+  Future excluir(Pessoa pessoa) async {
     _listaPessoas.remove(pessoa);
   }
 
   @override
-  List<Pessoa> listar() {
+  Future<List<Pessoa>> listar() async {
     return _listaPessoas.map((e) => e).toList();
   }
 
   @override
-  Pessoa salvar(Pessoa pessoa) {
+  Future<Pessoa> salvar(Pessoa pessoa) async {
     _listaPessoas.add(pessoa);
     return pessoa;
   }
 
   @override
-  iniciar() {
+  Future iniciar() async {
+
   }
 }

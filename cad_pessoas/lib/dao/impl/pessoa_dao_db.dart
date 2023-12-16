@@ -6,15 +6,16 @@ import 'package:path/path.dart';
 
 class PessoaDaoDb implements PessoaDao {
 
+  final String tabela = "pessoas";
   Database? _db;
 
   @override
-  iniciar() async {
+  Future iniciar() async {
     _db = await openDatabase(
       join(await getDatabasesPath(), 'cad_pessoas.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE pessoas(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, estado_civil NUMERIC)',
+          'CREATE TABLE $tabela(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, estado_civil NUMERIC)',
         );
       },
       version: 1,
@@ -34,18 +35,14 @@ class PessoaDaoDb implements PessoaDao {
   }
 
   @override
-  List<Pessoa> listar() {
-    return [];
+  Future<List<Pessoa>> listar() async {
+    final List<Map<String, dynamic>> result = await _db!.query(tabela);
+    return result.map((element) => Pessoa.fromMap(element)).toList();
   }
 
   @override
-  Pessoa salvar(Pessoa pessoa) {
-    // TODO: implement salvar
-    throw UnimplementedError();
+  Future<Pessoa> salvar(Pessoa pessoa) async {
+    pessoa.id = await _db!.insert(tabela, pessoa.toMap());
+    return pessoa;
   }
-
-
-
-
-
 }
