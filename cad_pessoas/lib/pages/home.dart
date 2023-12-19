@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
     _pessoaDao = PessoaDaoDb();
     _pessoaDao.iniciar().then((_) async {
       _listaPessoas = await _pessoaDao.listar();
+      print(_listaPessoas);
       setState(() {});
     });
   }

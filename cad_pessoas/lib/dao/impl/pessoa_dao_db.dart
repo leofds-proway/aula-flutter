@@ -23,15 +23,22 @@ class PessoaDaoDb implements PessoaDao {
   }
 
   @override
-  atualizar(Pessoa pessoa) {
-    // TODO: implement atualizar
-    throw UnimplementedError();
+  Future atualizar(Pessoa pessoa) async {
+    await _db!.update(
+      tabela,
+      pessoa.toMap(),
+      where: 'id = ?',
+      whereArgs: [pessoa.id],
+    );
   }
 
   @override
-  excluir(Pessoa pessoa) {
-    // TODO: implement excluir
-    throw UnimplementedError();
+  Future excluir(Pessoa pessoa) async {
+    await _db!.delete(
+      tabela,
+      where: 'id = ?',
+      whereArgs: [pessoa.id],
+    );
   }
 
   @override
