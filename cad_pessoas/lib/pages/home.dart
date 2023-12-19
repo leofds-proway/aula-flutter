@@ -22,7 +22,6 @@ class _HomeState extends State<Home> {
     _pessoaDao = PessoaDaoDb();
     _pessoaDao.iniciar().then((_) async {
       _listaPessoas = await _pessoaDao.listar();
-      print(_listaPessoas);
       setState(() {});
     });
   }
@@ -57,7 +56,9 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.only(top: 10.0),
           itemCount: _listaPessoas.length,
           itemBuilder: (context, index) {
-            return Item(pessoa: _listaPessoas[index]);
+            return Item(pessoa: _listaPessoas[index], (opcao){
+
+            });
           }),
     );
   }
