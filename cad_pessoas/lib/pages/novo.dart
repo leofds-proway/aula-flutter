@@ -52,24 +52,25 @@ class _NovoState extends State<Novo> {
   _clickSalvar() {
     if (_formKey.currentState!.validate()) {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text('Salvar?'),
-                content: Text('Tem certeza que deseja salvar?'),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Cancelar')),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        _salvar();
-                      },
-                      child: Text('Salvar')),
-                ],
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Salvar?'),
+          content: Text('Tem certeza que deseja salvar?'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancelar')),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _salvar();
+                },
+                child: Text('Salvar')),
+          ],
+        ),
+      );
     }
   }
 

@@ -7,7 +7,7 @@ import 'package:cad_pessoas/widgets/item.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-  Home({super.key});
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -17,11 +17,20 @@ class _HomeState extends State<Home> {
   List<Pessoa> _listaPessoas = [];
   late PessoaDao _pessoaDao;
 
+  Pessoa? pessoaRemovida;
+
   @override
   initState() {
     _pessoaDao = PessoaDaoDb();
     _pessoaDao.iniciar().then((_) async {
       _listaPessoas = await _pessoaDao.listar();
+      setState(() {});
+    });
+  }
+
+  _salvar(Pessoa pessoa){
+    _pessoaDao.salvar(pessoa).then((pessoaSalva) {
+      _listaPessoas.add(pessoaSalva);
       setState(() {});
     });
   }
@@ -34,10 +43,7 @@ class _HomeState extends State<Home> {
       ),
     ).then((Pessoa? pessoa) {
       if (pessoa != null) {
-        _pessoaDao.salvar(pessoa).then((pessoaSalva) {
-          _listaPessoas.add(pessoaSalva);
-          setState(() {});
-        });
+        _salvar(pessoa);
       }
     });
   }
@@ -46,22 +52,65 @@ class _HomeState extends State<Home> {
 
   }
 
-  _clickDelete(Pessoa pessoa){
+  _clickRemover(Pessoa pessoa){
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Remover?'),
+        content: Text('Tem certeza que deseja remover o(a) ${pessoa.nome} ?'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar')),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _remover(pessoa);
+              },
+              child: Text('Remover')),
+        ],
+      ),
+    );
+  }
 
+  _remover(Pessoa pessoa){
+    _pessoaDao.excluir(pessoa).then((value) {
+      pessoaRemovida = pessoa;
+      setState(() {
+        _listaPessoas.remove(pessoa);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Pessoa removida!'),
+            backgroundColor: Colors.grey,
+            action: SnackBarAction(
+              label: 'Desfazer',
+              textColor: Colors.black,
+              onPressed: (){
+                _salvar(pessoaRemovida!);
+              },
+            ),
+            duration: const Duration(seconds: 3),
+          )
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_listaPessoas);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cad Pessoas'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _clickAdd,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: ListView.builder(
-          padding: EdgeInsets.only(top: 10.0),
+          padding: const EdgeInsets.only(top: 10.0),
           itemCount: _listaPessoas.length,
           itemBuilder: (context, index) {
             Pessoa p = _listaPessoas[index];
@@ -75,7 +124,7 @@ class _HomeState extends State<Home> {
                     break;
                   case MyItem.itemLongPress:
                   case MyItem.itemDelete:
-                    _clickDelete(p);
+                    _clickRemover(p);
                     break;
                 }
               },
