@@ -42,6 +42,14 @@ class _HomeState extends State<Home> {
     });
   }
 
+  _clickEdit(Pessoa pessoa){
+
+  }
+
+  _clickDelete(Pessoa pessoa){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,9 +64,22 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.only(top: 10.0),
           itemCount: _listaPessoas.length,
           itemBuilder: (context, index) {
-            return Item(pessoa: _listaPessoas[index], (opcao){
-
-            });
+            Pessoa p = _listaPessoas[index];
+            return Item(
+              pessoa: p,
+              onMenuClick: (MyItem item) {
+                switch(item){
+                  case MyItem.itemTap:
+                  case MyItem.itemEdit:
+                    _clickEdit(p);
+                    break;
+                  case MyItem.itemLongPress:
+                  case MyItem.itemDelete:
+                    _clickDelete(p);
+                    break;
+                }
+              },
+            );
           }),
     );
   }

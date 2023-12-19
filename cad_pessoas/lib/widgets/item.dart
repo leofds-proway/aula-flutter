@@ -2,11 +2,12 @@
 import 'package:cad_pessoas/model/pessoa.dart';
 import 'package:flutter/material.dart';
 
-enum MyItem { itemEdit, itemDelete }
+enum MyItem { itemEdit, itemDelete, itemTap, itemLongPress }
 
 class Item extends StatelessWidget {
-  Item({super.key, required this.pessoa,});
+  Item({super.key, required this.pessoa, required this.onMenuClick});
 
+  late Function(MyItem item) onMenuClick;
   late Pessoa pessoa;
 
   @override
@@ -16,7 +17,7 @@ class Item extends StatelessWidget {
       subtitle: Text(pessoa.email),
       trailing: PopupMenuButton<MyItem>(
         onSelected: (MyItem value) {
-          //..
+          onMenuClick(value);
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry<MyItem>>[
           const PopupMenuItem<MyItem>(
@@ -36,6 +37,10 @@ class Item extends StatelessWidget {
         ],
       ),
       onTap: (){
+        onMenuClick(MyItem.itemTap);
+      },
+      onLongPress: (){
+        onMenuClick(MyItem.itemLongPress);
       },
     );
   }
