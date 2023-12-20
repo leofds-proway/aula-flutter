@@ -35,6 +35,14 @@ class _HomeState extends State<Home> {
     });
   }
 
+  _editar(Pessoa pessoaARemover,Pessoa pessoaAEditar){
+    _pessoaDao.atualizar(pessoaAEditar).then((value) {
+      _listaPessoas.remove(pessoaARemover);
+      _listaPessoas.add(pessoaAEditar);
+      setState(() {});
+    });
+  }
+
   _clickAdd() {
     Navigator.push<Pessoa?>(
       context,
@@ -49,7 +57,16 @@ class _HomeState extends State<Home> {
   }
 
   _clickEdit(Pessoa pessoa){
-
+    Navigator.push<Pessoa?>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Novo(pessoa: pessoa),
+      ),
+    ).then((Pessoa? pessoaEdit) {
+      if (pessoaEdit != null) {
+        _editar(pessoa, pessoaEdit);
+      }
+    });
   }
 
   _clickRemover(Pessoa pessoa){

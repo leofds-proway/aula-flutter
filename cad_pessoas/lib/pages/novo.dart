@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class Novo extends StatefulWidget {
-  Novo({super.key});
+  Novo({super.key, this.pessoa});
+
+  Pessoa? pessoa;
 
   @override
   State<Novo> createState() => _NovoState();
@@ -17,6 +19,17 @@ class _NovoState extends State<Novo> {
   final _emailController = TextEditingController();
   final _esdatoCivilController = CustomSwitchController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  initState(){
+    if(widget.pessoa != null){
+      Pessoa pessoa = widget.pessoa!;
+      _nomeController.text = pessoa.nome;
+      _telefoneController.text = pessoa.telefone;
+      _emailController.text = pessoa.email;
+      _esdatoCivilController.selected = pessoa.estadoCivil;
+    }
+  }
 
   _getTextField(
       {required String label,
@@ -86,6 +99,9 @@ class _NovoState extends State<Novo> {
       email: campoEmail,
       estadoCivil: chaveEstadoCivil,
     );
+    if(widget.pessoa != null) {
+      pessoa.id = widget.pessoa!.id;
+    }
 
     Navigator.pop(context, pessoa);
   }
@@ -97,9 +113,10 @@ class _NovoState extends State<Novo> {
 
   @override
   Widget build(BuildContext context) {
+    String title = widget.pessoa == null ? 'Novo' : 'Editar';
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Novo'),
+        title: Text( title ),
       ),
       backgroundColor: Colors.grey[200],
       body: GestureDetector(

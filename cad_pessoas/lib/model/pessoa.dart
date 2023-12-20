@@ -14,6 +14,7 @@ class Pessoa {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'nome': nome,
       'email': email,
       'telefone': telefone,
