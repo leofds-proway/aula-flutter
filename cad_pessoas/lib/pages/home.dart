@@ -35,10 +35,10 @@ class _HomeState extends State<Home> {
     });
   }
 
-  _editar(Pessoa pessoaARemover,Pessoa pessoaAEditar){
-    _pessoaDao.atualizar(pessoaAEditar).then((value) {
-      _listaPessoas.remove(pessoaARemover);
-      _listaPessoas.add(pessoaAEditar);
+  _editar(Pessoa pessoa,Pessoa pessoaEditada){
+    _pessoaDao.atualizar(pessoaEditada).then((value) {
+      _listaPessoas.remove(pessoa);
+      _listaPessoas.add(pessoaEditada);
       setState(() {});
     });
   }
@@ -62,9 +62,9 @@ class _HomeState extends State<Home> {
       MaterialPageRoute(
         builder: (context) => Novo(pessoa: pessoa),
       ),
-    ).then((Pessoa? pessoaEdit) {
-      if (pessoaEdit != null) {
-        _editar(pessoa, pessoaEdit);
+    ).then((Pessoa? pessoaEditada) {
+      if (pessoaEditada != null) {
+        _editar(pessoa, pessoaEditada);
       }
     });
   }
