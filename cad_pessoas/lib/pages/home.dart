@@ -24,14 +24,22 @@ class _HomeState extends State<Home> {
     _pessoaDao = PessoaDaoDb();
     _pessoaDao.iniciar().then((_) async {
       _listaPessoas = await _pessoaDao.listar();
-      setState(() {});
+      _updateLista();
+    });
+  }
+
+  _updateLista(){
+    _listaPessoas.sort((a,b) {
+      return a.nome.toLowerCase().compareTo(b.nome.toLowerCase());
+    });
+    setState(() {
     });
   }
 
   _salvar(Pessoa pessoa){
     _pessoaDao.salvar(pessoa).then((pessoaSalva) {
       _listaPessoas.add(pessoaSalva);
-      setState(() {});
+      _updateLista();
     });
   }
 
@@ -39,7 +47,29 @@ class _HomeState extends State<Home> {
     _pessoaDao.atualizar(pessoaEditada).then((value) {
       _listaPessoas.remove(pessoa);
       _listaPessoas.add(pessoaEditada);
-      setState(() {});
+      _updateLista();
+    });
+  }
+
+  _remover(Pessoa pessoa){
+    _pessoaDao.excluir(pessoa).then((value) {
+      pessoaRemovida = pessoa;
+      _listaPessoas.remove(pessoa);
+      _updateLista();
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Pessoa removida!'),
+            backgroundColor: Colors.grey,
+            action: SnackBarAction(
+              label: 'Desfazer',
+              textColor: Colors.black,
+              onPressed: (){
+                _salvar(pessoaRemovida!);
+              },
+            ),
+            duration: const Duration(seconds: 3),
+          )
+      );
     });
   }
 
@@ -92,28 +122,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _remover(Pessoa pessoa){
-    _pessoaDao.excluir(pessoa).then((value) {
-      pessoaRemovida = pessoa;
-      setState(() {
-        _listaPessoas.remove(pessoa);
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Pessoa removida!'),
-            backgroundColor: Colors.grey,
-            action: SnackBarAction(
-              label: 'Desfazer',
-              textColor: Colors.black,
-              onPressed: (){
-                _salvar(pessoaRemovida!);
-              },
-            ),
-            duration: const Duration(seconds: 3),
-          )
-      );
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
