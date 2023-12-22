@@ -27,6 +27,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   Carta? cartSel;
+  bool comparando = false;
 
   List<List<Carta>> _baralho = [
     [
@@ -48,16 +49,18 @@ class _HomeState extends State<Home> {
   ];
 
   _click(Carta carta) async{
-    if(carta.show || carta.match) {
+    if(carta.show || carta.match || comparando) {
       return;
     }
     carta.show = true;
     if(cartSel == null){
       cartSel = carta;
     } else {
+      comparando = true;
       setState(() {
       });
       await Future.delayed(Duration(milliseconds: 500));
+
       if(carta.color == cartSel!.color){
         carta.match = true;
         cartSel!.match = true;
@@ -66,6 +69,7 @@ class _HomeState extends State<Home> {
         cartSel!.show = false;
       }
       cartSel = null;
+      comparando = false;
     }
     setState(() {
     });
