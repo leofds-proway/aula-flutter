@@ -6,8 +6,21 @@ void main() {
   ));
 }
 
+class Carro {
+  String heroTag;
+  String imageUrl;
+  String descricao;
+
+  Carro({required this.heroTag, required this.imageUrl, required this.descricao});
+}
+
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  List<Carro> _carros = [
+    Carro(heroTag: 'C1', imageUrl: 'assets/image/fusca.png', descricao: 'Fusca muito louco'),
+    Carro(heroTag: 'C2', imageUrl: 'assets/image/premio.png', descricao: 'Um presente pra vc'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -17,28 +30,18 @@ class HomePage extends StatelessWidget {
       ),
       body: Row(
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Page2(heroTag: "A1", url: 'assets/image/fusca.png',)));
-            },
-            child: Hero(
-              tag: "A1",
-              child: Image.asset('assets/image/fusca.png',
-                  width: 200, height: 100, fit: BoxFit.cover),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Page2(heroTag: "A2", url: 'assets/image/premio.png',)));
-            },
-            child: Hero(
-              tag: "A2",
-              child: Image.asset('assets/image/premio.png',
-                  width: 200, height: 100, fit: BoxFit.cover),
-            ),
-          ),
+          for(final itemCarro in _carros)
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Page2(carro: itemCarro,)));
+              },
+              child: Hero(
+                tag: itemCarro.heroTag,
+                child: Image.asset(itemCarro.imageUrl,
+                    width: 200, height: 100, fit: BoxFit.cover),
+              ),
+            )
         ],
       ),
     );
@@ -46,10 +49,9 @@ class HomePage extends StatelessWidget {
 }
 
 class Page2 extends StatelessWidget {
-  Page2({super.key, required this.heroTag, required this.url});
+  Page2({super.key, required this.carro});
 
-  String heroTag;
-  String url;
+  Carro carro;
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +60,8 @@ class Page2 extends StatelessWidget {
         title: Text('Carro'),
       ),
       body: Hero(
-        tag: heroTag,
-        child: Image.asset(this.url),
+        tag: carro.heroTag,
+        child: Image.asset(carro.imageUrl),
       ),
     );
   }
