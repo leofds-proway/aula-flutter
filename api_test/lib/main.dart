@@ -12,7 +12,8 @@ class Home extends StatelessWidget {
   final dio = Dio();
 
   void getHttp() async {
-    final response = await dio.get('http://localhost:3333/pessoas');
+    //final response = await dio.get('http://192.168.0.78:3333/pessoas');
+    final  response = await dio.post('http://192.168.0.78:3333/pessoas', data: {'id': 12, 'name': 'dio'});
     print(response);
   }
 

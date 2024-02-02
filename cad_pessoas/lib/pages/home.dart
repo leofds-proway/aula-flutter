@@ -1,5 +1,5 @@
+import 'package:cad_pessoas/dao/impl/pessoa_dao_api.dart';
 import 'package:cad_pessoas/dao/impl/pessoa_dao_db.dart';
-import 'package:cad_pessoas/dao/impl/pessoa_dao_memory.dart';
 import 'package:cad_pessoas/dao/pessoa_dao.dart';
 import 'package:cad_pessoas/model/pessoa.dart';
 import 'package:cad_pessoas/pages/novo.dart';
@@ -21,7 +21,8 @@ class _HomeState extends State<Home> {
 
   @override
   initState() {
-    _pessoaDao = PessoaDaoDb();
+    //_pessoaDao = PessoaDaoDb();
+    _pessoaDao = PessoaDaoApi();
     _pessoaDao.iniciar().then((_) async {
       _listaPessoas = await _pessoaDao.listar();
       _updateLista();
