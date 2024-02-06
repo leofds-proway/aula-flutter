@@ -18,7 +18,7 @@ class Pessoa {
       'nome': nome,
       'email': email,
       'telefone': telefone,
-      'estado_civil': estadoCivil
+      'estadoCivil': estadoCivil
     };
   }
 
@@ -28,7 +28,7 @@ class Pessoa {
       nome: map['nome'],
       email: map['email'],
       telefone: map['telefone'],
-      estadoCivil: map['estado_civil'] == 1 ? true : false,
+      estadoCivil: map['estadoCivil'] == 1 || map['estadoCivil'] ? true : false,
     );
   }
 

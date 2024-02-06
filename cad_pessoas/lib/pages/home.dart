@@ -17,6 +17,8 @@ class _HomeState extends State<Home> {
   List<Pessoa> _listaPessoas = [];
   late PessoaDao _pessoaDao;
 
+  bool _carregando = true;
+
   Pessoa? pessoaRemovida;
 
   @override
@@ -26,6 +28,8 @@ class _HomeState extends State<Home> {
     _pessoaDao.iniciar().then((_) async {
       _listaPessoas = await _pessoaDao.listar();
       _updateLista();
+    }).catchError((e){
+      print(e);
     });
   }
 
@@ -34,25 +38,39 @@ class _HomeState extends State<Home> {
       return a.nome.toLowerCase().compareTo(b.nome.toLowerCase());
     });
     setState(() {
+      _carregando = false;
     });
   }
 
   _salvar(Pessoa pessoa){
+    setState(() {
+      _carregando = true;
+    });
     _pessoaDao.salvar(pessoa).then((pessoaSalva) {
       _listaPessoas.add(pessoaSalva);
       _updateLista();
+    }).catchError((e){
+      print(e);
     });
   }
 
   _editar(Pessoa pessoa,Pessoa pessoaEditada){
+    setState(() {
+      _carregando = true;
+    });
     _pessoaDao.atualizar(pessoaEditada).then((value) {
       _listaPessoas.remove(pessoa);
       _listaPessoas.add(pessoaEditada);
       _updateLista();
+    }).catchError((e){
+      print(e);
     });
   }
 
   _remover(Pessoa pessoa){
+    setState(() {
+      _carregando = true;
+    });
     _pessoaDao.excluir(pessoa).then((value) {
       pessoaRemovida = pessoa;
       _listaPessoas.remove(pessoa);
@@ -71,6 +89,8 @@ class _HomeState extends State<Home> {
             duration: const Duration(seconds: 3),
           )
       );
+    }).catchError((e){
+      print(e);
     });
   }
 
@@ -123,7 +143,17 @@ class _HomeState extends State<Home> {
     );
   }
 
-
+  _loading(){
+    return Container(
+      child: Center(
+        child: Container(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +166,7 @@ class _HomeState extends State<Home> {
         onPressed: _clickAdd,
         child: const Icon(Icons.add),
       ),
-      body: ListView.builder(
+      body: _carregando ? _loading() : ListView.builder(
           padding: const EdgeInsets.only(top: 10.0),
           itemCount: _listaPessoas.length,
           itemBuilder: (context, index) {

@@ -15,7 +15,7 @@ class PessoaDaoDb implements PessoaDao {
       join(await getDatabasesPath(), 'cad_pessoas.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE $tabela(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, estado_civil NUMERIC)',
+          'CREATE TABLE $tabela(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, estadoCivil NUMERIC)',
         );
       },
       version: 1,
